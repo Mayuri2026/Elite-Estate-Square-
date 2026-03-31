@@ -9,6 +9,8 @@ const properties = [
     location: "Neo Tokyo, High Orbit",
     price: "$15,000,000",
     image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80",
+    video: 'https://cdn.pixabay.com/video/2021/09/01/87107-595304627_large.mp4',
+    description: 'Breathtaking orbital views from every room.'
   },
   {
     id: 2,
@@ -16,6 +18,8 @@ const properties = [
     location: "Sea of Tranquility",
     price: "$8,500,000",
     image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80",
+    video: 'https://cdn.pixabay.com/video/2023/11/04/187747-881026040_large.mp4',
+    description: 'A masterpiece of lunar architecture.'
   },
   {
     id: 3,
@@ -23,6 +27,8 @@ const properties = [
     location: "New York, Sector 7",
     price: "$22,000,000",
     image: "https://images.unsplash.com/photo-1600607687931-cebf0746e48e?auto=format&fit=crop&q=80",
+    video: 'https://cdn.pixabay.com/video/2021/02/11/64741-512061386_large.mp4',
+    description: 'The height of luxury in New York sky-living.'
   }
 ];
 
@@ -148,16 +154,33 @@ const Home = () => {
                 viewport={{ once: true, margin: "-100px" }}
                 transition={{ duration: 0.6, delay: idx * 0.2 }}
                 whileHover={{ y: -15, scale: 1.02 }}
-                className="glass-card rounded-2xl overflow-hidden group cursor-pointer block relative transition-all duration-300 hover:shadow-[0_20px_40px_rgba(59,130,246,0.3)] neon-border p-1"
+                className="glass-card rounded-2xl overflow-hidden group cursor-pointer block relative transition-all duration-300 hover:shadow-[0_20px_40px_rgba(59,130,246,0.3)] neon-border p-1 hologram-shine"
               >
                 <Link to={`/property/${prop.id}`}>
-                  <div className="relative h-64 overflow-hidden rounded-xl bg-card">
-                    <img src={prop.image} alt={prop.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent opacity-80" />
-                    
-                    <div className="absolute top-4 right-4 glass px-3 py-1 rounded-full text-xs font-semibold text-primary-light flex items-center gap-1 backdrop-blur-xl border border-primary/20">
-                      <span className="w-1.5 h-1.5 rounded-full bg-primary-light animate-pulse" />
-                      Available
+                  <div className="relative h-72 overflow-hidden rounded-[2rem] bg-card p-1">
+                    <div className="relative h-full w-full rounded-[1.8rem] overflow-hidden">
+                      <img 
+                        src={prop.image} 
+                        alt={prop.title} 
+                        className="w-full h-full object-cover transition-all duration-1000 group-hover:scale-125 group-hover:opacity-0" 
+                      />
+                      
+                      <video 
+                        autoPlay 
+                        loop 
+                        muted 
+                        playsInline
+                        className="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-1000 scale-110 group-hover:scale-100"
+                      >
+                        <source src={prop.video} type="video/mp4" />
+                      </video>
+
+                      <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity" />
+                      
+                      <div className="absolute top-4 right-4 glass px-3 py-1 rounded-full text-[10px] font-black tracking-widest uppercase text-primary-light flex items-center gap-1 backdrop-blur-xl border border-primary/20">
+                        <span className="w-1.5 h-1.5 rounded-full bg-primary-light animate-pulse" />
+                        Live Tour
+                      </div>
                     </div>
                   </div>
                   
@@ -165,19 +188,28 @@ const Home = () => {
                     <div className="flex justify-between items-start mb-4">
                       <div>
                         <h3 className="text-xl font-bold text-white mb-1 group-hover:text-primary-light transition-colors">{prop.title}</h3>
-                        <p className="flex items-center gap-1 text-sm text-gray-400">
-                          <MapPin size={14} /> {prop.location}
+                        <p className="flex items-center gap-1 text-sm text-gray-500">
+                          <MapPin size={14} className="text-primary" /> {prop.location}
                         </p>
+                      </div>
+                      <div className="text-xl font-black text-white text-glow">
+                        {prop.price}
                       </div>
                     </div>
                     
-                    <div className="flex justify-between items-center mt-6 pt-4 border-t border-white/10">
-                      <div className="text-xl font-bold text-white">
-                        {prop.price}
-                      </div>
-                      <span className="text-sm text-primary-light flex items-center gap-1 opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
-                        View Details <ArrowRight size={16} />
+                    <p className="text-gray-400 text-sm font-light mb-6 line-clamp-1">{prop.description}</p>
+                    
+                    <div className="flex justify-between items-center pt-4 border-t border-white/10">
+                      <span className="text-sm font-bold text-white group-hover:text-primary-light transition-colors flex items-center gap-2">
+                        Explore Space <ArrowRight size={16} />
                       </span>
+                      <div className="flex -space-x-2">
+                        {[1,2,3].map(i => (
+                          <div key={i} className="w-6 h-6 rounded-full border-2 border-background bg-card overflow-hidden">
+                            <img src={`https://i.pravatar.cc/100?img=${i+10}`} alt="Agent" className="w-full h-full object-cover" />
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   </div>
                 </Link>
