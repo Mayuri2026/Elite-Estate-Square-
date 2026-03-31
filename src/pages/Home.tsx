@@ -129,7 +129,7 @@ const Home = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-end mb-16">
             <div>
-              <h2 className="text-3xl md:text-5xl font-bold mb-4">
+              <h2 className="text-3xl md:text-5xl font-bold mb-4 italic">
                 Exclusive <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-light to-blue-400">Listings</span>
               </h2>
               <p className="text-gray-400 max-w-xl">Curated floating spaces that elevate luxury to the stars. Experience breathtaking views and anti-gravity architecture.</p>
@@ -184,11 +184,81 @@ const Home = () => {
               </motion.div>
             ))}
           </div>
-          
-          <div className="mt-12 text-center md:hidden">
-            <Link to="/listings" className="inline-flex items-center gap-2 text-primary-light hover:text-white transition-colors">
-              View All Listings <ArrowRight size={20} />
-            </Link>
+        </div>
+      </section>
+
+      {/* Why Choose Us Section */}
+      <section className="py-24 bg-card/10 backdrop-blur-sm relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-primary/10 rounded-full blur-[100px] -mr-48 -mt-48" />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-5xl font-bold mb-4 italic">
+              Redefining <span className="text-primary-light">Architectural</span> Boundaries
+            </h2>
+            <p className="text-gray-400 max-w-2xl mx-auto">We don't just sell properties; we curate future-proof living experiences that defy conventional limits.</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+            {[
+              { 
+                title: "Anti-Gravity Tech", 
+                desc: "Every property is equipped with the latest structural levitation systems for unparalleled views.",
+                icon: <Grid className="text-primary-light" size={40} />
+              },
+              { 
+                title: "Smart Ecosystems", 
+                desc: "Fully autonomous home management systems that learn and adapt to your every need.",
+                icon: <MapPin className="text-primary-light" size={40} />
+              },
+              { 
+                title: "Elite Security", 
+                desc: "Quantum-encrypted biometric security for absolute privacy and peace of mind.",
+                icon: <Search className="text-primary-light" size={40} />
+              }
+            ].map((feature, i) => (
+              <motion.div 
+                key={i}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.1 }}
+                className="p-8 glass-card rounded-3xl hover:bg-white/5 transition-colors group border border-white/5"
+              >
+                <div className="mb-6 p-4 bg-primary/10 w-fit rounded-2xl group-hover:scale-110 transition-transform duration-500">
+                  {feature.icon}
+                </div>
+                <h3 className="text-2xl font-bold mb-4">{feature.title}</h3>
+                <p className="text-gray-400 leading-relaxed">{feature.desc}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Newsletter Section */}
+      <section className="py-24 relative overflow-hidden">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="glass-card rounded-[40px] p-8 md:p-16 text-center relative overflow-hidden group border border-primary/20">
+            <div className="absolute inset-0 bg-primary/5 opacity-50 group-hover:opacity-100 transition-opacity" />
+            
+            <div className="relative z-10">
+              <h2 className="text-3xl md:text-5xl font-bold mb-6 italic">Stay in the <span className="text-primary-light">Orbit</span></h2>
+              <p className="text-gray-300 text-lg mb-10 max-w-xl mx-auto">Join our exclusive mailing list to get first access to premium listings and future launches.</p>
+              
+              <form className="flex flex-col md:flex-row gap-4 max-w-2xl mx-auto">
+                <input 
+                  type="email" 
+                  placeholder="Enter your cosmic email..." 
+                  className="flex-1 bg-white/5 border border-white/10 rounded-2xl px-6 py-4 focus:outline-none focus:border-primary-light transition-colors text-white"
+                />
+                <motion.button 
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="bg-primary hover:bg-primary-light text-white font-bold px-10 py-4 rounded-2xl shadow-[0_0_20px_rgba(59,130,246,0.3)]"
+                >
+                  Join Now
+                </motion.button>
+              </form>
+            </div>
           </div>
         </div>
       </section>
