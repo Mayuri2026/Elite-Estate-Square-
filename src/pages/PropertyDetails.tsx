@@ -1,31 +1,17 @@
+import { useEffect } from 'react';
+import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
 import { MapPin, BedDouble, Bath, Square, ChevronLeft, Calendar, Video, ArrowRight, Rocket } from 'lucide-react';
+import { properties } from '../data/properties';
 
 const PropertyDetails = () => {
-  // Syncing with Skyborne Villa data
-  const property = {
-    id: 1, 
-    title: 'Skyborne Villa', 
-    location: 'Neo Tokyo, High Orbit, Sector 4', 
-    price: '$15,000,000', 
-    beds: 4, 
-    baths: 5, 
-    area: '12,000 sq ft',
-    video: 'https://cdn.pixabay.com/video/2021/09/01/87107-595304627_large.mp4',
-    description: "Experience the pinnacle of anti-gravity architecture. The Skyborne Villa features self-sustaining energy fields, biometric security integration, and unbroken panoramic views of Neo Tokyo. Its floating structure uses state-of-the-art magnetic levitation technology, providing a completely serene and vibration-free living environment.",
-    amenities: ['Anti-Gravity Drive', 'Holographic Deck', 'Bio-filtered Atmosphere', 'Quantum Secure Vault', 'Hyper-elevator Access', 'Solar sails'],
-    agent: {
-      name: 'Elena Vance',
-      role: 'Elite Broker',
-      image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80'
-    },
-    images: [
-      'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80',
-      'https://images.unsplash.com/photo-1600607687931-cebf0746e48e?auto=format&fit=crop&q=80',
-      'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&q=80'
-    ]
-  };
+  const { id } = useParams<{ id: string }>();
+  const propertyId = parseInt(id || '1', 10);
+  const property = properties.find(p => p.id === propertyId) || properties[0];
+
+  useEffect(() => {
+    document.title = `${property.title} | ${property.location} | Elite Estate Squad`;
+  }, [property]);
 
   return (
     <div className="w-full relative min-h-screen pb-20">
@@ -41,6 +27,7 @@ const PropertyDetails = () => {
           className="absolute inset-0"
         >
           <video 
+            key={property.video}
             autoPlay 
             loop 
             muted 

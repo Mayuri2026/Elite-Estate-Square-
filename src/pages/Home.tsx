@@ -1,40 +1,27 @@
+import { useEffect, useState } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { Search, MapPin, Grid, ArrowRight } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { properties } from '../data/properties';
+import Counter from '../components/Counter';
+import SectorMap from '../components/SectorMap';
 
-const properties = [
-  {
-    id: 1,
-    title: "Skyborne Villa",
-    location: "Neo Tokyo, High Orbit",
-    price: "$15,000,000",
-    image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80",
-    video: 'https://cdn.pixabay.com/video/2021/09/01/87107-595304627_large.mp4',
-    description: 'Breathtaking orbital views from every room.'
-  },
-  {
-    id: 2,
-    title: "Lunar Oasis Estate",
-    location: "Sea of Tranquility",
-    price: "$8,500,000",
-    image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80",
-    video: 'https://cdn.pixabay.com/video/2023/11/04/187747-881026040_large.mp4',
-    description: 'A masterpiece of lunar architecture.'
-  },
-  {
-    id: 3,
-    title: "Aura Penthouse",
-    location: "New York, Sector 7",
-    price: "$22,000,000",
-    image: "https://images.unsplash.com/photo-1600607687931-cebf0746e48e?auto=format&fit=crop&q=80",
-    video: 'https://cdn.pixabay.com/video/2021/02/11/64741-512061386_large.mp4',
-    description: 'The height of luxury in New York sky-living.'
-  }
-];
+const featuredProperties = properties.filter(p => p.featured).slice(0, 3);
 
 const Home = () => {
   const { scrollYProgress } = useScroll();
   const y = useTransform(scrollYProgress, [0, 1], ['0%', '50%']);
+  const navigate = useNavigate();
+  const [search, setSearch] = useState('');
+  const [type, setType] = useState('');
+
+  useEffect(() => {
+    document.title = "Elite Estate Squad | Defying Gravity in Futuristic Living";
+  }, []);
+
+  const handleSearch = () => {
+    navigate(`/listings?search=${search}&type=${type}`);
+  };
 
   return (
     <div className="w-full">
@@ -92,18 +79,28 @@ const Home = () => {
             <div className="flex-1 relative z-10 w-full">
               <div className="flex items-center gap-3 bg-white/5 rounded-xl px-4 py-3 border border-white/10 focus-within:border-primary-light/50 transition-colors">
                 <MapPin className="text-gray-400" size={20} />
-                <input type="text" placeholder="Location, City, or Planet..." className="bg-transparent w-full text-white focus:outline-none placeholder:text-gray-500" />
+                <input 
+                  type="text" 
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  placeholder="Location, City, or Planet..." 
+                  className="bg-transparent w-full text-white focus:outline-none placeholder:text-gray-500" 
+                />
               </div>
             </div>
             
             <div className="flex-1 relative z-10 w-full flex gap-4">
               <div className="flex-1 flex items-center gap-3 bg-white/5 rounded-xl px-4 py-3 border border-white/10 focus-within:border-primary-light/50 transition-colors">
                 <Grid className="text-gray-400" size={20} />
-                <select className="bg-transparent w-full text-gray-300 focus:outline-none appearance-none cursor-pointer">
+                <select 
+                  value={type}
+                  onChange={(e) => setType(e.target.value)}
+                  className="bg-transparent w-full text-gray-300 focus:outline-none appearance-none cursor-pointer"
+                >
                   <option value="" className="bg-card">Property Type</option>
-                  <option value="sky-villa" className="bg-card">Sky Villa</option>
-                  <option value="orbital" className="bg-card">Orbital Estate</option>
-                  <option value="penthouse" className="bg-card">Gravity Penthouse</option>
+                  <option value="Sky Villa" className="bg-card">Sky Villa</option>
+                  <option value="Orbital Estate" className="bg-card">Orbital Estate</option>
+                  <option value="Penthouse" className="bg-card">Gravity Penthouse</option>
                 </select>
               </div>
             </div>
@@ -111,6 +108,7 @@ const Home = () => {
             <motion.button 
               whileHover={{ scale: 1.05, boxShadow: "0 0 25px rgba(59,130,246,0.6)" }}
               whileTap={{ scale: 0.95 }}
+              onClick={handleSearch}
               className="bg-primary hover:bg-primary-light text-white font-semibold py-3 px-8 rounded-xl transition-all flex items-center justify-center gap-2 relative z-10 group/btn"
             >
               <Search size={20} className="group-hover/btn:animate-pulse" />
@@ -130,6 +128,58 @@ const Home = () => {
         </motion.div>
       </section>
 
+      {/* Stats Quick Preview */}
+      <section className="py-20 relative z-10 border-y border-white/5 bg-white/5 backdrop-blur-md">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-12 text-center">
+            {[
+              { label: 'Properties', value: 450, suffix: '+' },
+              { label: 'Happy Clients', value: 1200, suffix: '+' },
+              { label: 'Sectors', value: 15, suffix: '' },
+              { label: 'Total Valuation', value: 25, suffix: 'B+' }
+            ].map((stat, i) => (
+              <div key={i} className="group">
+                <div className="text-4xl md:text-5xl font-black text-white mb-2 group-hover:text-primary-light transition-colors">
+                  <Counter from={0} to={stat.value} suffix={stat.suffix} />
+                </div>
+                <div className="text-[10px] text-gray-500 uppercase tracking-[0.3em] font-black">{stat.label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Sector Map Experience */}
+      <section className="py-24 relative overflow-hidden bg-background/50 backdrop-blur-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="mb-16 text-center lg:text-left flex flex-col md:flex-row items-end justify-between gap-8">
+            <div className="max-w-2xl">
+              <motion.span 
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                className="text-[10px] text-gray-500 uppercase tracking-[0.5em] font-black mb-4 block"
+              >
+                Orbital Coverage
+              </motion.span>
+              <h2 className="text-4xl md:text-5xl font-black text-white italic uppercase tracking-tighter">Explore the <span className="text-primary-light font-black">Sectors</span></h2>
+              <p className="text-gray-400 mt-4 leading-relaxed font-light text-lg">Interactive mapping of our established orbital hubs. Select a sector to verify localized market data and active listing coordinates.</p>
+            </div>
+            <Link to="/listings" className="group flex items-center gap-4 text-xs font-black uppercase tracking-[0.3em] text-white/50 hover:text-primary-light transition-all border-b border-white/5 pb-2">
+              Comprehensive List <ArrowRight size={16} className="group-hover:translate-x-2 transition-transform" />
+            </Link>
+          </div>
+          
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+          >
+            <SectorMap />
+          </motion.div>
+        </div>
+      </section>
+
       {/* Featured Properties Section */}
       <section className="py-24 relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -146,7 +196,7 @@ const Home = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pt-8">
-            {properties.map((prop, idx) => (
+            {featuredProperties.map((prop, idx) => (
               <motion.div 
                 key={prop.id}
                 initial={{ opacity: 0, y: 50 }}
@@ -262,6 +312,46 @@ const Home = () => {
                 <p className="text-gray-400 leading-relaxed">{feature.desc}</p>
               </motion.div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Featured Testimonial */}
+      <section className="py-24 relative overflow-hidden border-y border-white/5 bg-primary/5">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col lg:flex-row items-center gap-16">
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.8 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              className="w-full lg:w-1/2 relative"
+            >
+              <div className="absolute inset-0 bg-primary/20 rounded-[3rem] blur-3xl -z-10" />
+              <div className="glass-card p-2 rounded-[3.5rem] border border-primary/30 shadow-[0_0_50px_rgba(59,130,246,0.2)]">
+                <img 
+                  src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80" 
+                  alt="Elite Client" 
+                  className="w-full aspect-square object-cover rounded-[3rem] grayscale hover:grayscale-0 transition-all duration-1000"
+                />
+                <div className="absolute -bottom-8 -right-8 glass-card px-8 py-6 rounded-3xl border border-primary/50 shadow-2xl">
+                  <div className="text-2xl font-black text-white italic">"Uparalleled Vision"</div>
+                  <div className="text-[10px] text-primary-light font-black uppercase tracking-widest mt-1">Verified Asset Owner</div>
+                </div>
+              </div>
+            </motion.div>
+
+            <div className="w-full lg:w-1/2 space-y-8">
+              <h2 className="text-4xl md:text-6xl font-black text-white italic uppercase tracking-tighter">What the <span className="text-primary-light">Elite</span> Say</h2>
+              <p className="text-2xl text-gray-300 font-light leading-relaxed italic">
+                "Relocating to the Neo Tokyo High Orbit was the most significant move of my life. Elite Estate Squad handled the quantum logistics and biometric security with surgical precision. My sky villa literally defies gravity and expectations."
+              </p>
+              <div className="pt-8 flex items-center gap-6">
+                <div className="w-16 h-px bg-primary-light" />
+                <div>
+                  <div className="text-xl font-bold text-white uppercase tracking-widest">Elena Vance</div>
+                  <div className="text-xs text-gray-500 uppercase tracking-widest mt-1">Executive at Stellar Dynamics</div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>

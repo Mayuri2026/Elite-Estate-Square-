@@ -1,5 +1,7 @@
+import { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Shield, Target, Globe } from 'lucide-react';
+import Counter from '../components/Counter';
 
 const team = [
   { name: 'Marcus Sterling', role: 'Founder & Visionary', image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80' },
@@ -9,6 +11,10 @@ const team = [
 ];
 
 const AboutUs = () => {
+  useEffect(() => {
+    document.title = "Our Vision & The Squad | Elite Estate Squad";
+  }, []);
+
   return (
     <div className="w-full relative z-10 pt-20 pb-20">
       <div className="fixed top-1/4 left-1/4 w-[400px] h-[400px] bg-primary/10 rounded-full blur-[120px] -z-10 animate-float" />
@@ -32,6 +38,29 @@ const AboutUs = () => {
           >
             At Elite Estate Squad, we operate at the bleeding edge of structural innovation and luxury living. We believe that true exclusivity defies gravity, limitations, and traditional planetary boundaries.
           </motion.p>
+        </div>
+
+        {/* Stats Grid */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-32">
+          {[
+            { label: 'Off-World Units Sold', value: 4500, suffix: '+' },
+            { label: 'Elite Sectors Secured', value: 120, suffix: '' },
+            { label: 'Client Satisfaction', value: 99, suffix: '%' },
+            { label: 'Asset Valuation', value: 50, suffix: 'B+' },
+          ].map((stat, idx) => (
+            <motion.div 
+              key={stat.label}
+              initial={{ scale: 0.8, opacity: 0 }}
+              whileInView={{ scale: 1, opacity: 1 }}
+              transition={{ delay: idx * 0.1 }}
+              className="text-center p-6 glass-card rounded-[2rem] border border-white/5"
+            >
+              <div className="text-3xl md:text-5xl font-black text-primary-light mb-2">
+                <Counter from={0} to={stat.value} duration={2} suffix={stat.suffix} />
+              </div>
+              <div className="text-[10px] text-gray-500 uppercase tracking-[0.2em] font-black">{stat.label}</div>
+            </motion.div>
+          ))}
         </div>
 
         {/* Values Grid */}

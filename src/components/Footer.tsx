@@ -1,4 +1,5 @@
-import { Rocket, Mail, Globe } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Rocket, Mail, Globe, Cpu, Shield, Zap } from 'lucide-react';
 
 const Footer = () => {
   return (
@@ -12,55 +13,61 @@ const Footer = () => {
                 ELITE ESTATE <span className="text-primary-light">SQUAD</span>
               </span>
             </div>
-            <p className="text-gray-400 text-sm mb-6">
-              Defying Gravity in Luxury Living. We bring you the most exclusive floating properties from around the globe.
+            <p className="text-gray-400 text-sm mb-6 leading-relaxed">
+              Defying Gravity in Luxury Living. We bring you the most exclusive floating properties from around the globe and beyond.
             </p>
             <div className="flex space-x-4">
-              <a href="#" className="text-gray-400 hover:text-primary-light transition-colors"><Globe size={20} /></a>
-              <a href="#" className="text-gray-400 hover:text-primary-light transition-colors"><Globe size={20} /></a>
-              <a href="#" className="text-gray-400 hover:text-primary-light transition-colors"><Globe size={20} /></a>
-              <a href="#" className="text-gray-400 hover:text-primary-light transition-colors"><Globe size={20} /></a>
+              <a href="#" className="text-gray-400 hover:text-primary-light transition-all hover:scale-110"><Zap size={18} /></a>
+              <a href="#" className="text-gray-400 hover:text-primary-light transition-all hover:scale-110"><Cpu size={18} /></a>
+              <a href="#" className="text-gray-400 hover:text-primary-light transition-all hover:scale-110"><Shield size={18} /></a>
+              <a href="#" className="text-gray-400 hover:text-primary-light transition-all hover:scale-110"><Globe size={18} /></a>
             </div>
           </div>
           
           <div>
-            <h3 className="text-white font-semibold mb-4 uppercase tracking-wider text-sm">Quick Links</h3>
-            <ul className="space-y-2 text-sm text-gray-400">
-              <li><a href="/" className="hover:text-primary-light transition-colors">Home</a></li>
-              <li><a href="/listings" className="hover:text-primary-light transition-colors">Listings</a></li>
-              <li><a href="/about" className="hover:text-primary-light transition-colors">About Us</a></li>
-              <li><a href="/services" className="hover:text-primary-light transition-colors">Services</a></li>
+            <h3 className="text-white font-semibold mb-6 uppercase tracking-widest text-xs">Quick Links</h3>
+            <ul className="space-y-3 text-sm text-gray-400">
+              <li><Link to="/" className="hover:text-primary-light transition-colors">Home</Link></li>
+              <li><Link to="/listings" className="hover:text-primary-light transition-colors">Listings</Link></li>
+              <li><Link to="/about" className="hover:text-primary-light transition-colors">About Us</Link></li>
+              <li><Link to="/services" className="hover:text-primary-light transition-colors">Services</Link></li>
+              <li><Link to="/contact" className="hover:text-primary-light transition-colors">Contact</Link></li>
             </ul>
           </div>
 
           <div>
-            <h3 className="text-white font-semibold mb-4 uppercase tracking-wider text-sm">Legal</h3>
-            <ul className="space-y-2 text-sm text-gray-400">
-              <li><a href="#" className="hover:text-primary-light transition-colors">Privacy Policy</a></li>
-              <li><a href="#" className="hover:text-primary-light transition-colors">Terms of Service</a></li>
-              <li><a href="#" className="hover:text-primary-light transition-colors">Cookie Policy</a></li>
+            <h3 className="text-white font-semibold mb-6 uppercase tracking-widest text-xs">Elite Sectors</h3>
+            <ul className="space-y-3 text-sm text-gray-400">
+              <li><a href="#" className="hover:text-primary-light transition-colors">Neo Tokyo High Orbit</a></li>
+              <li><a href="#" className="hover:text-primary-light transition-colors">Sea of Tranquility</a></li>
+              <li><a href="#" className="hover:text-primary-light transition-colors">Mars Alpha Colony</a></li>
+              <li><a href="#" className="hover:text-primary-light transition-colors">Asteroid Belt Prime</a></li>
             </ul>
           </div>
 
           <div>
-            <h3 className="text-white font-semibold mb-4 uppercase tracking-wider text-sm">Newsletter</h3>
-            <p className="text-gray-400 text-sm mb-4">Subscribe for exclusive dropping alerts.</p>
+            <h3 className="text-white font-semibold mb-6 uppercase tracking-widest text-xs">Newsletter</h3>
+            <p className="text-gray-400 text-sm mb-4">Subscribe for exclusive priority launch alerts.</p>
             <div className="flex mt-2 relative w-full group">
               <input 
                 type="email" 
-                placeholder="Enter your email" 
-                className="w-full bg-white/5 border border-white/10 rounded-l-md px-4 py-2 text-sm text-white focus:outline-none focus:border-primary-light group-hover:border-primary-light/50 transition-colors"
+                placeholder="Secure email address" 
+                className="w-full bg-white/5 border border-white/10 rounded-l-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-primary-light group-hover:border-primary-light/50 transition-colors"
                 aria-label="Email Address"
               />
-              <button className="bg-primary/80 hover:bg-primary px-4 py-2 rounded-r-md text-white border border-primary/20 backdrop-blur transition-colors">
-                <Mail size={16} />
+              <button className="bg-primary/80 hover:bg-primary px-6 py-3 rounded-r-2xl text-white border border-primary/20 backdrop-blur transition-all active:scale-95 group-hover:shadow-[0_0_15px_rgba(59,130,246,0.3)]">
+                <Mail size={18} />
               </button>
             </div>
           </div>
         </div>
         
-        <div className="border-t border-white/10 mt-12 pt-8 text-center text-sm text-gray-500">
-          <p>&copy; {new Date().getFullYear()} Elite Estate Squad. All rights reserved.</p>
+        <div className="border-t border-white/10 mt-16 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-500 uppercase tracking-widest font-medium">
+          <p>&copy; {new Date().getFullYear()} Elite Estate Squad. Defying Gravity Since 2026.</p>
+          <div className="flex gap-8">
+            <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
+            <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
+          </div>
         </div>
       </div>
     </footer>

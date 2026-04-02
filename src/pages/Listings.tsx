@@ -1,104 +1,36 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useLocation } from 'react-router-dom';
 import { Filter, MapPin, ArrowRight, Grid, BedDouble, Bath, Rocket } from 'lucide-react';
 import { Link } from 'react-router-dom';
-
-const properties = [
-  { 
-    id: 1, 
-    title: 'Skyborne Villa', 
-    location: 'Neo Tokyo, High Orbit', 
-    type: 'Sky Villa', 
-    price: '$15,000,000', 
-    beds: 4, 
-    baths: 5, 
-    specs: '12,000 sq ft', 
-    image: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80', 
-    video: 'https://cdn.pixabay.com/video/2021/09/01/87107-595304627_large.mp4',
-    description: 'Experience gravity-defying architecture with 360-degree views of the Neo Tokyo nebula.',
-    featured: true 
-  },
-  { 
-    id: 2, 
-    title: 'Lunar Oasis Estate', 
-    location: 'Sea of Tranquility', 
-    type: 'Orbital Estate', 
-    price: '$8,500,000', 
-    beds: 6, 
-    baths: 7, 
-    specs: '24,000 sq ft', 
-    image: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80', 
-    video: 'https://cdn.pixabay.com/video/2023/11/04/187747-881026040_large.mp4',
-    description: 'A serene sanctuary featuring bio-integrated oxygen systems and lunar-dust filtration.',
-    featured: false 
-  },
-  { 
-    id: 3, 
-    title: 'Aura Penthouse', 
-    location: 'New York, Sector 7', 
-    type: 'Penthouse', 
-    price: '$22,000,000', 
-    beds: 3, 
-    baths: 3, 
-    specs: '6,500 sq ft', 
-    image: 'https://images.unsplash.com/photo-1600607687931-cebf0746e48e?auto=format&fit=crop&q=80', 
-    video: 'https://cdn.pixabay.com/video/2021/02/11/64741-512061386_large.mp4',
-    description: 'Ultra-luxurious sky-living with smart-glass transparency control and private landing pad.',
-    featured: true 
-  },
-  { 
-    id: 4, 
-    title: 'Nebula Retreat', 
-    location: 'Mars Alpha Colony', 
-    type: 'Sky Villa', 
-    price: '$5,200,000', 
-    beds: 5, 
-    baths: 4, 
-    specs: '8,000 sq ft', 
-    image: 'https://images.unsplash.com/photo-1628108398466-93d43d395ecb?auto=format&fit=crop&q=80', 
-    video: 'https://cdn.pixabay.com/video/2021/04/13/71018-537446419_large.mp4',
-    description: 'Eco-friendly Mars habitat with integrated geothermal heating and red-planet aesthetics.',
-    featured: false 
-  },
-  { 
-    id: 5, 
-    title: 'Zenith Apex Tower', 
-    location: 'London, Sky District', 
-    type: 'Penthouse', 
-    price: '$18,500,000', 
-    beds: 4, 
-    baths: 4, 
-    specs: '9,200 sq ft', 
-    image: 'https://images.unsplash.com/photo-1583608205776-bfd35f0d9f83?auto=format&fit=crop&q=80', 
-    video: 'https://cdn.pixabay.com/video/2024/02/25/201934-916912304_large.mp4',
-    description: 'The pinnacle of London sky-living with automated climate adjustment and butler AI.',
-    featured: true 
-  },
-  { 
-    id: 6, 
-    title: 'Ceres Bio-Dome', 
-    location: 'Asteroid Belt', 
-    type: 'Orbital Estate', 
-    price: '$42,000,000', 
-    beds: 8, 
-    baths: 10, 
-    specs: '100,000 sq ft', 
-    image: 'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&q=80', 
-    video: 'https://cdn.pixabay.com/video/2023/11/17/189396-884841797_large.mp4',
-    description: 'Massive orbital estate with artificial gravity parks and deep-space observation decks.',
-    featured: false 
-  },
-];
+import { properties } from '../data/properties';
 
 const types = ['All', 'Sky Villa', 'Orbital Estate', 'Penthouse'];
 
 const Listings = () => {
   const [filterType, setFilterType] = useState('All');
+  const [searchQuery, setSearchQuery] = useState('');
   const [activeVideo, setActiveVideo] = useState<string | null>(null);
+  const location = useLocation();
 
-  const filteredProperties = filterType === 'All' 
-    ? properties 
-    : properties.filter(p => p.type === filterType);
+  useEffect(() => {
+    document.title = "Explore Elite Listings | Elite Estate Squad";
+    
+    // Parse URL params
+    const params = new URLSearchParams(location.search);
+    const searchParam = params.get('search');
+    const typeParam = params.get('type');
+    
+    if (searchParam) setSearchQuery(searchParam);
+    if (typeParam) setFilterType(typeParam);
+  }, [location.search]);
+
+  const filteredProperties = properties.filter(p => {
+    const matchesType = filterType === 'All' || p.type === filterType;
+    const matchesSearch = p.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                          p.location.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesType && matchesSearch;
+  });
 
   return (
     <div className="w-full relative z-10 pt-16">
@@ -118,6 +50,7 @@ const Listings = () => {
               className="relative w-full max-w-6xl aspect-video rounded-[2rem] overflow-hidden shadow-[0_0_100px_rgba(59,130,246,0.3)] border border-white/10"
             >
               <video 
+                key={activeVideo}
                 autoPlay 
                 controls 
                 className="w-full h-full object-cover"
@@ -174,7 +107,13 @@ const Listings = () => {
             <label className="text-xs text-gray-500 uppercase tracking-widest font-bold pl-1">Search</label>
             <div className="flex items-center gap-3 bg-white/5 rounded-xl px-4 py-3 border border-white/10 focus-within:border-primary-light/50 transition-colors">
               <MapPin className="text-gray-400" size={18} />
-              <input type="text" placeholder="Location or keywords..." className="bg-transparent w-full text-white focus:outline-none placeholder:text-gray-700 text-sm" />
+              <input 
+                type="text" 
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Location or keywords..." 
+                className="bg-transparent w-full text-white focus:outline-none placeholder:text-gray-700 text-sm" 
+              />
             </div>
           </div>
           
@@ -197,7 +136,7 @@ const Listings = () => {
           <div className="flex items-end">
             <button className="w-full md:w-auto bg-primary text-white text-sm font-bold py-4 px-10 rounded-xl transition-all flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(59,130,246,0.3)]">
               <Filter size={18} />
-              Apply Filters
+              Show Results ({filteredProperties.length})
             </button>
           </div>
         </motion.div>
@@ -280,7 +219,7 @@ const Listings = () => {
                     </div>
                     <div className="bg-white/5 py-3 px-2 rounded-2xl border border-white/5 text-center">
                       <div className="text-primary-light flex justify-center mb-1"><Grid size={16}/></div>
-                      <div className="text-xs text-white font-bold">{prop.specs.split(' ')[0]}</div>
+                      <div className="text-xs text-white font-bold">{prop.area.split(' ')[0]}</div>
                     </div>
                   </div>
                   

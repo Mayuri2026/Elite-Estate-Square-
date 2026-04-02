@@ -1,7 +1,20 @@
-import { motion } from 'framer-motion';
+import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Mail, Phone, MapPin, Send, Rocket } from 'lucide-react';
 
 const Contact = () => {
+  const [submitted, setSubmitted] = useState(false);
+
+  useEffect(() => {
+    document.title = "Contact Elite Squad | Secure Communication";
+  }, []);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitted(true);
+    setTimeout(() => setSubmitted(false), 5000);
+  };
+
   return (
     <div className="w-full relative z-10 pt-20 pb-20">
       <div className="fixed top-0 left-0 w-full h-[50vh] bg-gradient-to-b from-primary/5 to-transparent -z-10" />
@@ -81,48 +94,69 @@ const Contact = () => {
               transition={{ delay: 0.3 }}
               className="glass-card rounded-3xl p-8 md:p-10 border border-primary/20 neon-border relative overflow-hidden"
             >
-              <div className="absolute top-0 right-0 p-6 opacity-10">
-                <Rocket size={120} className="text-primary-light" />
-              </div>
+              <AnimatePresence mode="wait">
+                {submitted ? (
+                  <motion.div 
+                    key="success"
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 1.1 }}
+                    className="flex flex-col items-center justify-center py-20 text-center"
+                  >
+                    <div className="w-20 h-20 bg-primary/20 rounded-full flex items-center justify-center text-primary-light mb-6 shadow-[0_0_30px_rgba(59,130,246,0.3)]">
+                      <Send size={40} className="animate-pulse" />
+                    </div>
+                    <h3 className="text-3xl font-bold text-white mb-4 italic uppercase tracking-tighter">Transmission Successful</h3>
+                    <p className="text-gray-400 max-w-sm">Your coordinates and message have been received. A liaison officer will contact you shortly.</p>
+                  </motion.div>
+                ) : (
+                  <motion.div key="form">
+                    <div className="absolute top-0 right-0 p-6 opacity-10">
+                      <Rocket size={120} className="text-primary-light" />
+                    </div>
 
-              <h3 className="text-2xl font-bold text-white mb-8 relative z-10">Send a Secure Transmission</h3>
-              
-              <form className="relative z-10 space-y-6" onSubmit={(e) => e.preventDefault()}>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <label className="text-xs uppercase tracking-widest text-gray-400 font-semibold pl-1">Identification</label>
-                    <input type="text" placeholder="Full Name" className="w-full bg-background/50 border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-gray-600 focus:outline-none focus:border-primary-light focus:shadow-[0_0_15px_rgba(96,165,250,0.3)] transition-all" />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-xs uppercase tracking-widest text-gray-400 font-semibold pl-1">Comm Link</label>
-                    <input type="email" placeholder="Email Address" className="w-full bg-background/50 border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-gray-600 focus:outline-none focus:border-primary-light focus:shadow-[0_0_15px_rgba(96,165,250,0.3)] transition-all" />
-                  </div>
-                </div>
-                
-                <div className="space-y-2">
-                  <label className="text-xs uppercase tracking-widest text-gray-400 font-semibold pl-1">Objective</label>
-                  <select className="w-full bg-background/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-primary-light focus:shadow-[0_0_15px_rgba(96,165,250,0.3)] transition-all appearance-none cursor-pointer">
-                    <option className="bg-card">I'm looking to buy property</option>
-                    <option className="bg-card">I'm looking to sell property</option>
-                    <option className="bg-card">Investment Consultation</option>
-                    <option className="bg-card">Other Inquiry</option>
-                  </select>
-                </div>
+                    <h3 className="text-2xl font-bold text-white mb-8 relative z-10">Send a Secure Transmission</h3>
+                    
+                    <form className="relative z-10 space-y-6" onSubmit={handleSubmit}>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="space-y-2">
+                          <label className="text-xs uppercase tracking-widest text-gray-400 font-semibold pl-1">Identification</label>
+                          <input required type="text" placeholder="Full Name" className="w-full bg-background/50 border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-gray-600 focus:outline-none focus:border-primary-light focus:shadow-[0_0_15px_rgba(96,165,250,0.3)] transition-all" />
+                        </div>
+                        <div className="space-y-2">
+                          <label className="text-xs uppercase tracking-widest text-gray-400 font-semibold pl-1">Comm Link</label>
+                          <input required type="email" placeholder="Email Address" className="w-full bg-background/50 border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-gray-600 focus:outline-none focus:border-primary-light focus:shadow-[0_0_15px_rgba(96,165,250,0.3)] transition-all" />
+                        </div>
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <label className="text-xs uppercase tracking-widest text-gray-400 font-semibold pl-1">Objective</label>
+                        <select className="w-full bg-background/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-primary-light focus:shadow-[0_0_15px_rgba(96,165,250,0.3)] transition-all appearance-none cursor-pointer">
+                          <option className="bg-card">I'm looking to buy property</option>
+                          <option className="bg-card">I'm looking to sell property</option>
+                          <option className="bg-card">Investment Consultation</option>
+                          <option className="bg-card">Other Inquiry</option>
+                        </select>
+                      </div>
 
-                <div className="space-y-2">
-                  <label className="text-xs uppercase tracking-widest text-gray-400 font-semibold pl-1">Message Data</label>
-                  <textarea rows={5} placeholder="Provide details requirements or coordinates..." className="w-full bg-background/50 border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-gray-600 focus:outline-none focus:border-primary-light focus:shadow-[0_0_15px_rgba(96,165,250,0.3)] transition-all resize-none"></textarea>
-                </div>
+                      <div className="space-y-2">
+                        <label className="text-xs uppercase tracking-widest text-gray-400 font-semibold pl-1">Message Data</label>
+                        <textarea required rows={5} placeholder="Provide details requirements or coordinates..." className="w-full bg-background/50 border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-gray-600 focus:outline-none focus:border-primary-light focus:shadow-[0_0_15px_rgba(96,165,250,0.3)] transition-all resize-none"></textarea>
+                      </div>
 
-                <motion.button 
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="w-full bg-gradient-to-r from-primary to-primary-dark hover:from-primary-light hover:to-primary text-white font-bold rounded-xl py-4 flex items-center justify-center gap-3 shadow-[0_0_20px_rgba(59,130,246,0.4)] transition-all"
-                >
-                  <Send size={20} />
-                  Transmit Message
-                </motion.button>
-              </form>
+                      <motion.button 
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        type="submit"
+                        className="w-full bg-gradient-to-r from-primary to-primary-dark hover:from-primary-light hover:to-primary text-white font-bold rounded-xl py-4 flex items-center justify-center gap-3 shadow-[0_0_20px_rgba(59,130,246,0.4)] transition-all"
+                      >
+                        <Send size={20} />
+                        Transmit Message
+                      </motion.button>
+                    </form>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </motion.div>
           </div>
         </div>
